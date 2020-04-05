@@ -30,18 +30,8 @@
             "engine.php",
             "missingPropertyService.php",
             "sessionCache.php",
-            "tracker.php",
-            "aspectPropertyValue.php"
+            "tracker.php"
         ]
-    },
-    "repositories": {
-        "core": {
-            "type": "path",
-            "url": "../FiftyOne.Pipeline.Core",
-            "options": {
-                "symlink": true
-            }
-        }
     },
     "require": {
         "51degrees/fiftyone.pipeline.core": "@dev"
