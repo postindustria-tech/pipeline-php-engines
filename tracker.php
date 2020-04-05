@@ -27,6 +27,11 @@ namespace fiftyone\pipeline\engines;
 
 require_once(__DIR__ . "/dataKeyedCache.php");
 
+/**
+ * The tracker class extends the cache class with 
+ * a track method that checks if a key is in the cache and runs
+ * a match method on the result if it is found in the cache 
+*/
 class tracker extends dataKeyedCache {
 
      public function track($key){

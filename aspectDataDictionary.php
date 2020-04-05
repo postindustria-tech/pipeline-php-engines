@@ -26,7 +26,8 @@ namespace fiftyone\pipeline\engines;
 require_once(__DIR__ . "/aspectData.php");
 
 /**
-* aspectData class extension that stores content as dictionary
+* aspectData class extension that stores content as an array
+* Similar to elementDataDictionary in the Pipeline core library
 */
 class aspectDataDictionary extends aspectData {
 

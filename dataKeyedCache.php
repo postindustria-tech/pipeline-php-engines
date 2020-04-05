@@ -25,13 +25,27 @@
 
 namespace fiftyone\pipeline\engines;
 
-class dataKeyedCache {
+/**
+ * A simple cache class which has a get and set method
+ * Can be added to an engine to cache its results for specific evidence
+*/
+  class dataKeyedCache {
 
+    /**
+    * Get an item from the cache
+    * @param string cache key
+    * @param mixed cache result
+    */
     public function get($cachekey) {
 
 
     }
 
+    /**
+    * Add a value to the cache
+    * @param string cache key
+    * @param mixed cache value
+    */
     public function set($cachekey, $value) {
 
 

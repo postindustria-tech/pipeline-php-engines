@@ -25,6 +25,11 @@
 
 namespace fiftyone\pipeline\engines;
 
+/**
+ * A missing property service runs when a property is not available in the
+ * aspectData. It can be extended to provide a specific message for why the property
+ * is not available
+*/
 class missingPropertyService {
 
     public function check($key, $flowElement) {

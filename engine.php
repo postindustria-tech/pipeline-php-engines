@@ -21,26 +21,43 @@
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
 
-
-
 namespace fiftyone\pipeline\engines;
 
 use fiftyone\pipeline\core\flowElement;
 
+
+/**
+ * An engine is an extension of the Pipeline Core flowElement class
+ * It allows for a cache, restricted properties and meaningful errors when
+ * a property isn't available via the aspect data missingPropertyService
+ * 
+*/
 class engine extends flowElement {
 
+    /**
+    * Add a cache to an engine
+    * @param cache (cache with get and set methods)
+    */
     public function setCache($cache){
 
         $this->cache = $cache;
 
     }
 
+    /**
+    * Add a cache to an engine
+    * @param cache (cache with get and set methods)
+    */
     public function setRestrictedProperties($propertiesList){
 
         $this->restrictedProperties = $propertiesList;
 
     }
 
+    /**
+    * A method to check if a flowData's evidence is in the cache
+    * @param flowData
+    */
     public function inCache($flowData) {
 
         $keys = $this->filterEvidence($flowData);
@@ -63,6 +80,12 @@ class engine extends flowElement {
 
 
 
+    /**
+    * Engine's core process function. 
+    * Calls specific overriden processInternal methods but wraps it in a cache check
+    * and a cache put
+    * @param flowData
+    */
     public function process($flowData) {
 
         if (isset($this->cache)) {

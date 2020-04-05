@@ -25,60 +25,51 @@
 
 namespace fiftyone\pipeline\engines;
 
-use fiftyone\pipeline\engines\dataKeyedCache;
-
 /**
- * An extension of the cache class that stores a cache in a user's session
- * if PHP sessions are active
+* aspectPropertyValue is a wrapper for a value that comes out of an engine
+* it allows you to check if a property has a meaningful value (->hasValue())
+* It throws an error with a message about why the value isn't available if the
+* value property is accessed and there is no value.
+*  
 */
-class sessionCache extends dataKeyedCache {
+class aspectPropertyValue {
 
-    public function __construct($cacheTime = 0){
+    /**
+    * Constructor for aspectPropertyValue
+    * @param string if there is no value, the reason for there not being one
+    * @param mixed the value
+    */
+    public function __construct($noValueMessage = null, $value = "noValue"){
 
-        $this->cacheTime = $cacheTime;
+        if($value !== "noValue"){
 
-    }
-
-    public function set($key, $value){
-
-        $cacheKey = \json_encode($key);
-
-        if(session_id()){
-
-            $cacheEntry = array(
-                "time" => time(),
-                "data" => serialize($value)
-            );
-
-            $_SESSION[$cacheKey] = $cacheEntry;
+            $this->value = $value;
+            $this->noValueMessage = null;
+            $this->hasValue = true;
+            
+        }
+        
+        if($noValueMessage){
+            
+            $this->hasValue = false;
+            $this->noValueMessage = $noValueMessage;
 
         }
 
     }
 
-    public function get($key){
+    /**
+    * Magic getter to access the value or throw an error with the no value message
+    * @param string key
+    * @return mixed value
+    */
+    public function __get($key){
 
-        $cacheKey = json_encode($key);
+        if($key === "value" && $this->noValueMessage){
 
-        if(session_id() && isset($_SESSION[$cacheKey])){
-
-            $cacheEntry = $_SESSION[$cacheKey];
-
-            // Check if timestamp greater than that set
-
-            if(time() - $cacheEntry["time"] < $this->cacheTime){
-
-                return unserialize($cacheEntry["data"]);
-
-            } else {
-
-                unset($_SESSION[$cacheKey]);
-
-                return null;
-
-            }
-
-        };
+            throw new \Exception($this->noValueMessage);
+            
+        }
 
     }
 
