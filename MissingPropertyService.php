@@ -4,7 +4,7 @@
  * Copyright 2019 51 Degrees Mobile Experts Limited, 5 Charlotte Close,
  * Caversham, Reading, Berkshire, United Kingdom RG4 7BY.
  *
- * This Original Work is licensed under the European Union Public Licence (EUPL) 
+ * This Original Work is licensed under the European Union Public Licence (EUPL)
  * v.1.2 and is subject to its terms as set out below.
  *
  * If a copy of the EUPL was not distributed with this file, You can obtain
@@ -14,46 +14,24 @@
  * amended by the European Commission) shall be deemed incompatible for
  * the purposes of the Work and the provisions of the compatibility
  * clause in Article 5 of the EUPL shall not apply.
- * 
- * If using the Work as, or as part of, a network application, by 
+ *
+ * If using the Work as, or as part of, a network application, by
  * including the attribution notice(s) required under Article 5 of the EUPL
- * in the end user terms of the application under an appropriate heading, 
+ * in the end user terms of the application under an appropriate heading,
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
 
-
-
 namespace fiftyone\pipeline\engines;
 
-require_once(__DIR__ . "/dataKeyedCache.php");
-
 /**
- * The tracker class extends the cache class with 
- * a track method that checks if a key is in the cache and runs
- * a match method on the result if it is found in the cache 
+ * A missing property service runs when a property is not available in the
+ * aspectData. It can be extended to provide a specific message for why the property
+ * is not available
 */
-class tracker extends dataKeyedCache {
-
-     public function track($key){
-
-        $result = $this->get($key);
-
-        if (!isset($result) || !$result) {
-   
-            return true;
-   
-        } else {
-   
-            return $this->match($key, $result);
-   
-        }
-
-     }
-
-    public function match($result) {
-
-        return true;
-
+class MissingPropertyService
+{
+    public function check($key, $flowElement)
+    {
+        throw new \Exception("Property " . $key . " not found in " . $flowElement->dataKey);
     }
-    
 }

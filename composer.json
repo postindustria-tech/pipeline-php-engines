@@ -19,18 +19,18 @@
 			"name": "Joseph Dix",
             "email": "joseph@51degrees.com"
         }
-	],
+    ],
     "license": "EUPL-1.2", 
     "type": "library",
     "autoload": {
         "classmap": [
-            "aspectData.php",
-            "aspectDataDictionary.php",
-            "dataKeyedCache.php",
-            "engine.php",
-            "missingPropertyService.php",
-            "sessionCache.php",
-            "tracker.php"
+            "AspectData.php",
+            "AspectDataDictionary.php",
+            "DataKeyedCache.php",
+            "Engine.php",
+            "MissingPropertyService.php",
+            "SessionCache.php",
+            "Tracker.php"
         ]
     },
     "require": {
