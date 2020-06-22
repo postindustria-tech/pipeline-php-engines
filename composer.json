@@ -34,6 +34,6 @@
         ]
     },
     "require": {
-        "51degrees/fiftyone.pipeline.core": "@dev"
+        "51degrees/fiftyone.pipeline.core": "4.*"
     }
 }
