@@ -33,6 +33,11 @@ use fiftyone\pipeline\core\FlowElement;
 */
 class Engine extends FlowElement
 {
+    private $dataSourceTier = "Unknown";    
+    
+    public function getDataSourceTier() {
+        return $this->dataSourceTier;
+    }
 
     /**
     * Add a cache to an engine
