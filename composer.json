@@ -29,6 +29,8 @@
             "DataKeyedCache.php",
             "Engine.php",
             "MissingPropertyService.php",
+            "MissingPropertyReason.php",
+            "MissingPropertyMessages.php",
             "SessionCache.php",
             "Tracker.php"
         ]
