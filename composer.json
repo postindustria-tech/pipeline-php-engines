@@ -28,6 +28,7 @@
             "AspectDataDictionary.php",
             "DataKeyedCache.php",
             "Engine.php",
+            "CloudEngine.php",
             "MissingPropertyService.php",
             "MissingPropertyReason.php",
             "MissingPropertyMessages.php",
