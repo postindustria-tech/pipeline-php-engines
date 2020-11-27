@@ -136,4 +136,105 @@ class MissingPropertyTests extends TestCase {
                 $e->getMessage());
         }
     }
+    
+    public function testProductNotInResource()
+    {
+        $service = new engines\MissingPropertyService();
+        
+        $engine = $this->createStub(engines\CloudEngine::class);
+
+        $properties = array();
+        
+        $engine->method('getProperties')
+             ->willReturn($properties);
+        $engine->method('getDataSourceTier')
+            ->willReturn("lite");
+        $engine->dataKey = "testElement";
+
+        // Assert
+        try {
+            $service->check("testProperty", $engine);
+            $this->fail();
+        } catch (\Exception $e) {
+            $this->assertEquals(
+                sprintf(engines\MissingPropertyMessages::PREFIX,
+                        "testProperty",
+                        "testElement") .
+                sprintf(engines\MissingPropertyMessages::PRODUCT_NOT_IN_CLOUD_RESOURCE,
+                        "testElement"),
+                $e->getMessage());
+        }
+    }
+        
+    public function testPropertyNotInResource()
+    {
+        $service = new engines\MissingPropertyService();
+        
+        $engine = $this->createStub(engines\CloudEngine::class);
+
+        $properties = array(
+            "testProperty" => array(
+                "name" => "testProperty",
+                "type" => "string",
+                "datatierswherepresent" => [ "premium" ],
+                "available" => false
+            )
+        );
+        
+        $engine->method('getProperties')
+             ->willReturn($properties);
+        $engine->method('getDataSourceTier')
+            ->willReturn("lite");
+        $engine->dataKey = "testElement";
+
+        // Assert
+        try {
+            $service->check("otherProperty", $engine);
+            $this->fail();
+        } catch (\Exception $e) {
+            $this->assertEquals(
+                sprintf(engines\MissingPropertyMessages::PREFIX,
+                        "otherProperty",
+                        "testElement") .
+                sprintf(engines\MissingPropertyMessages::PROPERTY_NOT_IN_CLOUD_RESOURCE,
+                        "testElement",
+                        "testProperty"),
+                $e->getMessage());
+        }
+    }
+        
+    public function testUnknown()
+    {
+        $service = new engines\MissingPropertyService();
+        
+        $engine = $this->createStub(engines\Engine::class);
+
+        $properties = array(
+            "testProperty" => array(
+                "name" => "testProperty",
+                "type" => "string",
+                "datatierswherepresent" => [ "premium" ],
+                "available" => true
+            )
+        );
+        
+        $engine->method('getProperties')
+             ->willReturn($properties);
+        $engine->method('getDataSourceTier')
+            ->willReturn("premium");
+        $engine->dataKey = "testElement";
+
+        // Assert
+        try {
+            $service->check("testProperty", $engine);
+            $this->fail();
+        } catch (\Exception $e) {
+            $this->assertEquals(
+                sprintf(engines\MissingPropertyMessages::PREFIX,
+                        "testProperty",
+                        "testElement") .
+                engines\MissingPropertyMessages::UNKNOWN,
+                $e->getMessage());
+        }
+    }
 }
