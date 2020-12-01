@@ -24,9 +24,9 @@
 namespace fiftyone\pipeline\engines;
 
 class MissingPropertyReason {
-    const DataFileUpgradeRequired = 0;
-    const PropertyExcludedFromEngineConfiguration = 1;
-    const PropertyNotAccessibleWithResourceKey = 2;
-    const ProductNotAccessibleWithResourceKey = 3;
-    const Unknown = 4;
+    public const DataFileUpgradeRequired = 0;
+    public const PropertyExcludedFromEngineConfiguration = 1;
+    public const PropertyNotAccessibleWithResourceKey = 2;
+    public const ProductNotAccessibleWithResourceKey = 3;
+    public const Unknown = 4;
 }

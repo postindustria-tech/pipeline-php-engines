@@ -22,5 +22,5 @@
  * ********************************************************************* */
 namespace fiftyone\pipeline\engines;
 
-class CloudEngine extends Engine {
+class CloudEngineBase extends Engine {
 }
