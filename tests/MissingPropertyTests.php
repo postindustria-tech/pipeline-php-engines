@@ -31,16 +31,6 @@ use PHPUnit\Framework\TestCase;
 
 class MissingPropertyTests extends TestCase {
     
-//    protected function createStub($originalClassName) {
-//
-//        return $this->getMockBuilder($originalClassName)
-//             ->disableOriginalConstructor()
-//             ->disableOriginalClone()
-//             ->disableArgumentCloning()
-//             ->disallowMockingUnknownTypes()
-//             ->getMock();
-//    }
-
     /**
      * Check that when an engine contains the property, but in another data
      * tier, an "upgrade required" exception message is returned.
