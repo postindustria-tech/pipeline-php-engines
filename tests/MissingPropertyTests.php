@@ -31,15 +31,16 @@ use PHPUnit\Framework\TestCase;
 
 class MissingPropertyTests extends TestCase {
     
-    private function createStub($class) {
-        return $this->getMockBuilder($class)
-             ->disableOriginalConstructor()
-             ->disableOriginalClone()
-             ->disableArgumentCloning()
-             ->disallowMockingUnknownTypes()
-             ->getMock();
-    }
-    
+//    protected function createStub($originalClassName) {
+//
+//        return $this->getMockBuilder($originalClassName)
+//             ->disableOriginalConstructor()
+//             ->disableOriginalClone()
+//             ->disableArgumentCloning()
+//             ->disallowMockingUnknownTypes()
+//             ->getMock();
+//    }
+
     /**
      * Check that when an engine contains the property, but in another data
      * tier, an "upgrade required" exception message is returned.
@@ -48,7 +49,7 @@ class MissingPropertyTests extends TestCase {
     {
         $service = new engines\MissingPropertyService();
         
-        $engine = $this->createStub(engines\Engine::class);
+        $engine = $this->createMock(engines\Engine::class);
 
         $properties = array(
             "testProperty" => array(
@@ -88,7 +89,7 @@ class MissingPropertyTests extends TestCase {
     {
         $service = new engines\MissingPropertyService();
         
-        $engine = $this->createStub(engines\Engine::class);
+        $engine = $this->createMock(engines\Engine::class);
 
         $properties = array(
             "testProperty" => array(
@@ -127,7 +128,7 @@ class MissingPropertyTests extends TestCase {
     {
         $service = new engines\MissingPropertyService();
         
-        $engine = $this->createStub(engines\Engine::class);
+        $engine = $this->createMock(engines\Engine::class);
 
         $properties = array(
             "testProperty" => array(
@@ -166,7 +167,7 @@ class MissingPropertyTests extends TestCase {
     {
         $service = new engines\MissingPropertyService();
         
-        $engine = $this->createStub(engines\CloudEngine::class);
+        $engine = $this->createMock(engines\CloudEngineBase::class);
 
         $properties = array();
         
@@ -199,7 +200,7 @@ class MissingPropertyTests extends TestCase {
     {
         $service = new engines\MissingPropertyService();
         
-        $engine = $this->createStub(engines\CloudEngine::class);
+        $engine = $this->createMock(engines\CloudEngineBase::class);
 
         $properties = array(
             "testProperty" => array(
@@ -240,7 +241,7 @@ class MissingPropertyTests extends TestCase {
     {
         $service = new engines\MissingPropertyService();
         
-        $engine = $this->createStub(engines\Engine::class);
+        $engine = $this->createMock(engines\Engine::class);
 
         $properties = array(
             "testProperty" => array(
