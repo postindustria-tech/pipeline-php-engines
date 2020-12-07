@@ -38,18 +38,23 @@ class MissingPropertyService
         throw new \Exception($this->getMessage($propertyName, $flowElement));
     }
     
+    /**
+     * Get the message to go with the exception.
+     * @param string $propertyName
+     * @param \fiftyone\pipeline\engines\CloudEngine $flowElement
+     * @return string
+     */
     private function getMessage($propertyName, $flowElement) {
         
         $reason = MissingPropertyReason::Unknown;
         $property = null;
 
-        // We know the property has extends AspectPropertyMetaData as it
-        // is a constraint of the AspectEngine interface, so don't check this
-        // cast
         foreach ($flowElement->getProperties() as $currentProperty) {
-            if (strcasecmp($currentProperty['name'], $propertyName) == 0) {
-                $property = $currentProperty;
-                break;
+            if (isset($currentProperty["name"])) {
+                if (strcasecmp($currentProperty['name'], $propertyName) == 0) {
+                    $property = $currentProperty;
+                    break;
+                }
             }
         }
 
@@ -57,19 +62,21 @@ class MissingPropertyService
             // Check if the property is available in the data file that is
             // being used by the engine.
             $containsDataTier = false;
-            foreach ($property['datatierswherepresent'] as $tier) {
-                if ($tier === $flowElement->getDataSourceTier()) {
-                    $containsDataTier = true;
-                    break;
+            if (isset($property['datatierswherepresent'])) {
+                foreach ($property['datatierswherepresent'] as $tier) {
+                    if ($tier === $flowElement->getDataSourceTier()) {
+                        $containsDataTier = true;
+                        break;
+                    }
                 }
-            }
 
-            if ($containsDataTier === false) {
-                $reason = MissingPropertyReason::DataFileUpgradeRequired;
-            }
-            // Check if the property is excluded from the results.
-            else if ($property['available'] === false) {
-                $reason = MissingPropertyReason::PropertyExcludedFromEngineConfiguration;
+                if ($containsDataTier === false) {
+                    $reason = MissingPropertyReason::DataFileUpgradeRequired;
+                }
+                // Check if the property is excluded from the results.
+                else if ($property['available'] === false) {
+                    $reason = MissingPropertyReason::PropertyExcludedFromEngineConfiguration;
+                }
             }
         }
         else {
@@ -120,6 +127,11 @@ class MissingPropertyService
         return $message;
     }
     
+    /**
+     * Get an array of property names from an array of properties.
+     * @param array $properties
+     * @return array
+     */
     private function getPropertyNames($properties) {
         $names = [];
         foreach ($properties as $property) {

@@ -31,6 +31,19 @@ use PHPUnit\Framework\TestCase;
 
 class MissingPropertyTests extends TestCase {
     
+    private function createStub($class) {
+        return $this->getMockBuilder($class)
+             ->disableOriginalConstructor()
+             ->disableOriginalClone()
+             ->disableArgumentCloning()
+             ->disallowMockingUnknownTypes()
+             ->getMock();
+    }
+    
+    /**
+     * Check that when an engine contains the property, but in another data
+     * tier, an "upgrade required" exception message is returned.
+     */
     public function testUpgradeRequired()
     {
         $service = new engines\MissingPropertyService();
@@ -67,6 +80,10 @@ class MissingPropertyTests extends TestCase {
         }
     }
     
+    /**
+     * Check that when an engine contains the property, but it is not marked as
+     * available, an "excluded" exception message is returned.
+     */
     public function testExcluded()
     {
         $service = new engines\MissingPropertyService();
@@ -102,6 +119,10 @@ class MissingPropertyTests extends TestCase {
         }
     }
     
+    /**
+     * Check that when an engine does not contain the property, an "unknown"
+     * exception message is returned.
+     */
     public function testNotInEngine()
     {
         $service = new engines\MissingPropertyService();
@@ -137,6 +158,10 @@ class MissingPropertyTests extends TestCase {
         }
     }
     
+    /**
+     * Check that when a cloud engine does not contain the product, a "product 
+     * not in resource" exception message is returned.
+     */
     public function testProductNotInResource()
     {
         $service = new engines\MissingPropertyService();
@@ -166,6 +191,10 @@ class MissingPropertyTests extends TestCase {
         }
     }
         
+    /**
+     * Check that when a cloud engine does not contain the property, a "property
+     * not in resource" exception message is returned.
+     */
     public function testPropertyNotInResource()
     {
         $service = new engines\MissingPropertyService();
@@ -203,6 +232,10 @@ class MissingPropertyTests extends TestCase {
         }
     }
         
+    /**
+     * Check that when none of the above are true, an "unknown" exception
+     * message is returned.
+     */
     public function testUnknown()
     {
         $service = new engines\MissingPropertyService();

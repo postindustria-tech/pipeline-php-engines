@@ -22,5 +22,10 @@
  * ********************************************************************* */
 namespace fiftyone\pipeline\engines;
 
+/**
+ * Intermediary between Engine and CloudEngine classes. This exists only so that
+ * the MissingPropertyService can check whether an engine is an instance of a
+ * CloudEngine.
+ */
 class CloudEngineBase extends Engine {
 }

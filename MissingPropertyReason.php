@@ -23,6 +23,10 @@
 
 namespace fiftyone\pipeline\engines;
 
+/**
+ * Enumeration of reasons why a property may be missing from the results of an
+ * Engine's processing. 
+ */
 class MissingPropertyReason {
     public const DataFileUpgradeRequired = 0;
     public const PropertyExcludedFromEngineConfiguration = 1;

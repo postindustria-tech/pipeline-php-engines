@@ -30,11 +30,16 @@ use fiftyone\pipeline\core\FlowElement;
  * It allows for a cache, restricted properties and meaningful errors when
  * a property isn't available via the aspect data missingPropertyService
  *
-*/
+ */
 class Engine extends FlowElement
 {
     private $dataSourceTier = "Unknown";    
     
+    /**
+     * Get the tier to which the current data source belongs. For 51Degrees this
+     * will usually be one of: Lite Premium Enterprise 
+     * @return string
+     */
     public function getDataSourceTier() {
         return $this->dataSourceTier;
     }

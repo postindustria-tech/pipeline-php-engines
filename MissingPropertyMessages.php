@@ -23,26 +23,56 @@
 
 namespace fiftyone\pipeline\engines;
 
+/**
+ * Messages which may be reused for various missing property exceptions.
+ */
 class MissingPropertyMessages {
+    /**
+     * String to prefix all messages with. This takes the name of a property
+     * and the name of the element as format arguments.
+     */
     const PREFIX = "Property '%s' not found in data for element '%s'. ";
+    /**
+     * A data upgrade is required (e.g. free to paid). This takes the data tier
+     * name which contains the property and the name of the product as format
+     * arguments.
+     */
     const DATA_UPGRADE_REQUIRED =
         "This is because your license and/or data file " .
         "does not include this property. The property is available " .
         "with the %s license/data for the %s";
+    /**
+     * The property was excluded from the engine's configuration. This takes no
+     * format arguments.
+     */
     const PROPERTY_EXCLUDED =
         "This is because the property has been excluded when configuring " .
         "the engine.";
+    /**
+     * The engine was a cloud engine, and the resource key does not contain the
+     * required product (e.g. device). This takes the name of the product as a
+     * format argument.
+     */
     const PRODUCT_NOT_IN_CLOUD_RESOURCE =
         "This is because your resource key does not include access to " .
         "any properties under '%s'. For more details on resource keys, " .
         "see our explainer: " .
         "https://51degrees.com/documentation/_info__resourcekeys.html";
+    /**
+     * The engine was a cloud engine, and the resource key does not contain the
+     * required property (e.g. hardwarename). This takes the name of the product
+     * and the properties the resource contains as format arguments.
+     */
     const PROPERTY_NOT_IN_CLOUD_RESOURCE =
         "This is because your resource key does not include access to " .
         "this property. Properties that are included for this key under " .
         "'%s' are %s. For more details on resource keys, see our " .
         "explainer: " .
         "https://51degrees.com/documentation/4.1/_info__resourcekeys.html";
+    /**
+     * The reason for the missing property is none of the above. This takes no
+     * format arguments.
+     */
     const UNKNOWN =
         "The reason for this is unknown. Please check that the aspect " .
         "and property name are correct.";
