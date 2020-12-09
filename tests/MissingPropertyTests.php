@@ -177,7 +177,7 @@ class MissingPropertyTests extends TestCase {
                         "testProperty",
                         "testElement") .
                 sprintf(engines\MissingPropertyMessages::PRODUCT_NOT_IN_CLOUD_RESOURCE,
-                        "testElement"),
+                        get_class($engine)),
                 $e->getMessage());
         }
     }

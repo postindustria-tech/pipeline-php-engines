@@ -80,7 +80,7 @@ class MissingPropertyService
             }
         }
         else {
-            if ($flowElement instanceof CloudEngine) {
+            if ($flowElement instanceof CloudEngineBase) {
                 if (count($flowElement->getProperties()) == 0) {
                     $reason = MissingPropertyReason::ProductNotAccessibleWithResourceKey;
                 }
@@ -111,7 +111,7 @@ class MissingPropertyService
                 break;
             case MissingPropertyReason::PropertyNotAccessibleWithResourceKey:
                 
-                $available = $this->getPropertyNames($flowElement.getProperties());
+                $available = $this->getPropertyNames($flowElement->getProperties());
                 $message .= sprintf(
                     MissingPropertyMessages::PROPERTY_NOT_IN_CLOUD_RESOURCE,
                     $flowElement->dataKey,
@@ -135,7 +135,7 @@ class MissingPropertyService
     private function getPropertyNames($properties) {
         $names = [];
         foreach ($properties as $property) {
-            array_push($names, $property->getName());
+            array_push($names, $property["name"]);
         }
         return $names;
     }
