@@ -16,7 +16,7 @@ phpunit --log-junit test-results.xml
 
 ## Development
 
-When making changes to this repository, it may be necessary to link to a local development version of pipeline dependencies. For information on this, see [Composer local path](https://getcomposer.org/doc/05-repositories.md#path).
+When making changes to pipeline-php-engines repository, it may be necessary to link to a local development version of pipeline dependencies. For information on this, see [Composer local path](https://getcomposer.org/doc/05-repositories.md#path).
 
 For exmaple, if a development version of `51degrees/fiftyone.pipeline.core` was stored locally, the location would be added with:
 
