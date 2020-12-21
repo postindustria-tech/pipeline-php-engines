@@ -57,12 +57,6 @@ class AspectData extends ElementData
     */
     public function get($key)
     {
-        if (isset($this->flowElement->restrictedProperties)) {
-            if (!in_array($key, $this->flowElement->restrictedProperties)) {
-                throw new \Exception("Property " . $key . " was excluded from " . $this->flowElement->dataKey);
-            }
-        }
-
         try {
             $result = $this->getInternal($key);
 

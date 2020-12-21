@@ -23,6 +23,8 @@
 
 namespace fiftyone\pipeline\engines;
 
+use fiftyone\pipeline\engines\MissingPropertyReason;
+
 /**
  * A missing property service runs when a property is not available in the
  * aspectData. It can be extended to provide a specific message for why the property
@@ -30,8 +32,111 @@ namespace fiftyone\pipeline\engines;
 */
 class MissingPropertyService
 {
-    public function check($key, $flowElement)
+    
+    public function check($propertyName, $flowElement)
     {
-        throw new \Exception("Property " . $key . " not found in " . $flowElement->dataKey);
+        throw new \Exception($this->getMessage($propertyName, $flowElement));
+    }
+    
+    /**
+     * Get the message to go with the exception.
+     * @param string $propertyName
+     * @param \fiftyone\pipeline\engines\CloudEngine $flowElement
+     * @return string
+     */
+    private function getMessage($propertyName, $flowElement) {
+        
+        $reason = MissingPropertyReason::Unknown;
+        $property = null;
+
+        foreach ($flowElement->getProperties() as $currentProperty) {
+            if (isset($currentProperty["name"])) {
+                if (strcasecmp($currentProperty['name'], $propertyName) == 0) {
+                    $property = $currentProperty;
+                    break;
+                }
+            }
+        }
+
+        if ($property != null) {
+            // Check if the property is available in the data file that is
+            // being used by the engine.
+            $containsDataTier = false;
+            if (isset($property['datatierswherepresent'])) {
+                foreach ($property['datatierswherepresent'] as $tier) {
+                    if ($tier === $flowElement->getDataSourceTier()) {
+                        $containsDataTier = true;
+                        break;
+                    }
+                }
+
+                if ($containsDataTier === false) {
+                    $reason = MissingPropertyReason::DataFileUpgradeRequired;
+                }
+                // Check if the property is excluded from the results.
+                else if ($property['available'] === false) {
+                    $reason = MissingPropertyReason::PropertyExcludedFromEngineConfiguration;
+                }
+            }
+        }
+        else {
+            if ($flowElement instanceof CloudEngineBase) {
+                if (count($flowElement->getProperties()) == 0) {
+                    $reason = MissingPropertyReason::ProductNotAccessibleWithResourceKey;
+                }
+                else {
+                    $reason = MissingPropertyReason::PropertyNotAccessibleWithResourceKey;
+                }
+            }
+        }
+
+        // Build the message string to return to the caller.
+        $message = sprintf(MissingPropertyMessages::PREFIX,
+                $propertyName,
+                $flowElement->dataKey);
+        switch ($reason) {
+            case MissingPropertyReason::DataFileUpgradeRequired:
+                $message .= sprintf(
+                    MissingPropertyMessages::DATA_UPGRADE_REQUIRED,
+                    join(",", $property['datatierswherepresent']),
+                    get_class($flowElement));
+                break;
+            case MissingPropertyReason::PropertyExcludedFromEngineConfiguration:
+                $message .= MissingPropertyMessages::PROPERTY_EXCLUDED;
+                break;
+            case MissingPropertyReason::ProductNotAccessibleWithResourceKey:
+                $message .= sprintf(
+                    MissingPropertyMessages::PRODUCT_NOT_IN_CLOUD_RESOURCE,
+                    get_class($flowElement));
+                break;
+            case MissingPropertyReason::PropertyNotAccessibleWithResourceKey:
+                
+                $available = $this->getPropertyNames($flowElement->getProperties());
+                $message .= sprintf(
+                    MissingPropertyMessages::PROPERTY_NOT_IN_CLOUD_RESOURCE,
+                    $flowElement->dataKey,
+                    join(", ", $available));
+                break;
+            case MissingPropertyReason::Unknown:
+                $message .= MissingPropertyMessages::UNKNOWN;
+                break;
+            default:
+                break;
+        }
+
+        return $message;
+    }
+    
+    /**
+     * Get an array of property names from an array of properties.
+     * @param array $properties
+     * @return array
+     */
+    private function getPropertyNames($properties) {
+        $names = [];
+        foreach ($properties as $property) {
+            array_push($names, $property["name"]);
+        }
+        return $names;
     }
 }
