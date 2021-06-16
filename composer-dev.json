@@ -39,7 +39,7 @@
     "repositories": [
         {
             "type": "path",
-            "path": "../pipeline-php-core"
+            "url": "pipeline-php-core"
         }
     ],
     "require": {
