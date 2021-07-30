@@ -8,12 +8,16 @@ parameters:
 # imageName: agent to run the stage on
 - name: buildType
 - name: imageName
+- name: runTests
+  type: string
+  default: 'On'
 
 stages:
 - stage: Build_and_Test
 
   jobs:
   - job: Build_and_Test
+    condition: ne(${{ parameters.runTests }}, 'Off')
     pool:
       vmImage: ${{ parameters.imageName }}
 
