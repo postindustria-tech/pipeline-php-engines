@@ -57,7 +57,7 @@ class MissingPropertyMessages {
         "This is because your resource key does not include access to " .
         "any properties under '%s'. For more details on resource keys, " .
         "see our explainer: " .
-        "https://51degrees.com/documentation/4.2/_info__resourcekeys.html";
+        "https://51degrees.com/documentation/_info__resource_keys.html";
     /**
      * The engine was a cloud engine, and the resource key does not contain the
      * required property (e.g. hardwarename). This takes the name of the product
@@ -68,7 +68,7 @@ class MissingPropertyMessages {
         "this property. Properties that are included for this key under " .
         "'%s' are %s. For more details on resource keys, see our " .
         "explainer: " .
-        "https://51degrees.com/documentation/4.2/_info__resourcekeys.html";
+        "https://51degrees.com/documentation/_info__resource_keys.html";
     /**
      * The reason for the missing property is none of the above. This takes no
      * format arguments.
