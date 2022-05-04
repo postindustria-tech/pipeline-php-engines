@@ -42,9 +42,9 @@ stages:
 
     # Composer >= 2.3 does not support PHP < 7.2.5
     - script: |
-          sudo composer self-update --2.2
-        displayName: 'Use Composer 2.2'
-        condition: eq(variables['phpVersion'], '5.6')
+        sudo composer self-update --2.2
+      displayName: 'Use Composer 2.2'
+      condition: eq(variables['phpVersion'], '5.6')
 
     # Install php and set as default Version to be used in the next tasks.
     - script: |
