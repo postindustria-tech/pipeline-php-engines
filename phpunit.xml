@@ -1,6 +1,6 @@
 <phpunit>
   <testsuites>
-    <testsuite name="Tests">
+    <testsuite name="Unit">
       <file>tests/MissingPropertyTests.php</file>
       <file>tests/EngineTests.php</file>
     </testsuite>
