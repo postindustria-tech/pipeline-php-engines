@@ -2,7 +2,7 @@
   <testsuites>
     <testsuite name="Tests">
       <file>tests/MissingPropertyTests.php</file>
-      <file>tests/index.php</file>
+      <file>tests/EngineTests.php</file>
     </testsuite>
   </testsuites>
 </phpunit>
