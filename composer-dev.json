@@ -42,7 +42,7 @@
             "url": "pipeline-php-core",
             "options": {
                 "versions": {
-                    "51degrees/fiftyone.pipeline.engines": "4"
+                    "51degrees/fiftyone.pipeline.core": "4"
                 }
             }
 
