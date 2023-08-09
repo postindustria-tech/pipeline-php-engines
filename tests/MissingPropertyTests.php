@@ -23,242 +23,202 @@
 
 namespace fiftyone\pipeline\engines\tests;
 
-require(__DIR__ . "/../vendor/autoload.php");
-
-use fiftyone\pipeline\engines;
-
+use fiftyone\pipeline\engines\CloudEngineBase;
+use fiftyone\pipeline\engines\Engine;
+use fiftyone\pipeline\engines\MissingPropertyMessages;
+use fiftyone\pipeline\engines\MissingPropertyService;
 use PHPUnit\Framework\TestCase;
 
-class MissingPropertyTests extends TestCase {
-    
+class MissingPropertyTests extends TestCase
+{
     /**
      * Check that when an engine contains the property, but in another data
      * tier, an "upgrade required" exception message is returned.
      */
     public function testUpgradeRequired()
     {
-        $service = new engines\MissingPropertyService();
-        
-        $engine = $this->createMock(engines\Engine::class);
+        $properties = [
+            'testProperty' => [
+                'name' => 'testProperty',
+                'type' => 'string',
+                'datatierswherepresent' => ['premium']
+            ]
+        ];
 
-        $properties = array(
-            "testProperty" => array(
-                "name" => "testProperty",
-                "type" => "string",
-                "datatierswherepresent" => [ "premium" ]
-            )
-        );
-        
-        $engine->method('getProperties')
-             ->willReturn($properties);
-        $engine->method('getDataSourceTier')
-            ->willReturn("lite");
-        $engine->dataKey = "testElement";
+        $engine = $this->createMock(Engine::class);
+        $engine->method('getProperties')->willReturn($properties);
+        $engine->method('getDataSourceTier')->willReturn('lite');
+        $engine->dataKey = 'testElement';
 
-        // Assert
+        $errorMessage = sprintf(MissingPropertyMessages::PREFIX, 'testProperty', 'testElement');
+        $errorMessage .= sprintf(MissingPropertyMessages::DATA_UPGRADE_REQUIRED, 'premium', get_class($engine));
+
+        $service = new MissingPropertyService();
+
         try {
-            $service->check("testProperty", $engine);
+            $service->check('testProperty', $engine);
             $this->fail();
         } catch (\Exception $e) {
-            $this->assertEquals(
-                sprintf(engines\MissingPropertyMessages::PREFIX,
-                        "testProperty",
-                        "testElement") .
-                sprintf(engines\MissingPropertyMessages::DATA_UPGRADE_REQUIRED,
-                        "premium",
-                        get_class($engine)),
-                $e->getMessage());
+            $this->assertSame($errorMessage, $e->getMessage());
         }
     }
-    
+
     /**
      * Check that when an engine contains the property, but it is not marked as
      * available, an "excluded" exception message is returned.
      */
     public function testExcluded()
     {
-        $service = new engines\MissingPropertyService();
-        
-        $engine = $this->createMock(engines\Engine::class);
+        $properties = [
+            'testProperty' => [
+                'name' => 'testProperty',
+                'type' => 'string',
+                'datatierswherepresent' => ['lite'],
+                'available' => false
+            ]
+        ];
 
-        $properties = array(
-            "testProperty" => array(
-                "name" => "testProperty",
-                "type" => "string",
-                "datatierswherepresent" => [ "lite" ],
-                "available" => false
-            )
-        );
-        
-        $engine->method('getProperties')
-             ->willReturn($properties);
-        $engine->method('getDataSourceTier')
-            ->willReturn("lite");
-        $engine->dataKey = "testElement";
+        $engine = $this->createMock(Engine::class);
 
-        // Assert
+        $engine->method('getProperties')->willReturn($properties);
+        $engine->method('getDataSourceTier')->willReturn('lite');
+        $engine->dataKey = 'testElement';
+
+        $errorMessage = sprintf(MissingPropertyMessages::PREFIX, 'testProperty', 'testElement');
+        $errorMessage .= MissingPropertyMessages::PROPERTY_EXCLUDED;
+
+        $service = new MissingPropertyService();
+
         try {
-            $service->check("testProperty", $engine);
+            $service->check('testProperty', $engine);
             $this->fail();
         } catch (\Exception $e) {
-            $this->assertEquals(
-                sprintf(engines\MissingPropertyMessages::PREFIX,
-                        "testProperty",
-                        "testElement") .
-                engines\MissingPropertyMessages::PROPERTY_EXCLUDED,
-                $e->getMessage());
+            $this->assertSame($errorMessage, $e->getMessage());
         }
     }
-    
+
     /**
      * Check that when an engine does not contain the property, an "unknown"
      * exception message is returned.
      */
     public function testNotInEngine()
     {
-        $service = new engines\MissingPropertyService();
-        
-        $engine = $this->createMock(engines\Engine::class);
+        $properties = [
+            'testProperty' => [
+                'name' => 'testProperty',
+                'type' => 'string',
+                'datatierswherepresent' => ['premium'],
+                'available' => false
+            ]
+        ];
 
-        $properties = array(
-            "testProperty" => array(
-                "name" => "testProperty",
-                "type" => "string",
-                "datatierswherepresent" => [ "premium" ],
-                "available" => false
-            )
-        );
-        
-        $engine->method('getProperties')
-             ->willReturn($properties);
-        $engine->method('getDataSourceTier')
-            ->willReturn("lite");
-        $engine->dataKey = "testElement";
+        $engine = $this->createMock(Engine::class);
+        $engine->method('getProperties')->willReturn($properties);
+        $engine->method('getDataSourceTier')->willReturn('lite');
+        $engine->dataKey = 'testElement';
 
-        // Assert
+        $errorMessage = sprintf(MissingPropertyMessages::PREFIX, 'otherProperty', 'testElement');
+        $errorMessage .= MissingPropertyMessages::UNKNOWN;
+
+        $service = new MissingPropertyService();
+
         try {
-            $service->check("otherProperty", $engine);
+            $service->check('otherProperty', $engine);
             $this->fail();
         } catch (\Exception $e) {
-            $this->assertEquals(
-                sprintf(engines\MissingPropertyMessages::PREFIX,
-                        "otherProperty",
-                        "testElement") .
-                engines\MissingPropertyMessages::UNKNOWN,
-                $e->getMessage());
+            $this->assertSame($errorMessage, $e->getMessage());
         }
     }
-    
+
     /**
-     * Check that when a cloud engine does not contain the product, a "product 
+     * Check that when a cloud engine does not contain the product, a "product
      * not in resource" exception message is returned.
      */
     public function testProductNotInResource()
     {
-        $service = new engines\MissingPropertyService();
-        
-        $engine = $this->createMock(engines\CloudEngineBase::class);
+        $properties = [];
 
-        $properties = array();
-        
-        $engine->method('getProperties')
-             ->willReturn($properties);
-        $engine->method('getDataSourceTier')
-            ->willReturn("lite");
-        $engine->dataKey = "testElement";
+        $engine = $this->createMock(CloudEngineBase::class);
+        $engine->method('getProperties')->willReturn($properties);
+        $engine->method('getDataSourceTier')->willReturn('lite');
+        $engine->dataKey = 'testElement';
 
-        // Assert
+        $errorMessage = sprintf(MissingPropertyMessages::PREFIX, 'testProperty', 'testElement');
+        $errorMessage .= sprintf(MissingPropertyMessages::PRODUCT_NOT_IN_CLOUD_RESOURCE, get_class($engine));
+
+        $service = new MissingPropertyService();
+
         try {
-            $service->check("testProperty", $engine);
+            $service->check('testProperty', $engine);
             $this->fail();
         } catch (\Exception $e) {
-            $this->assertEquals(
-                sprintf(engines\MissingPropertyMessages::PREFIX,
-                        "testProperty",
-                        "testElement") .
-                sprintf(engines\MissingPropertyMessages::PRODUCT_NOT_IN_CLOUD_RESOURCE,
-                        get_class($engine)),
-                $e->getMessage());
+            $this->assertSame($errorMessage, $e->getMessage());
         }
     }
-        
+
     /**
      * Check that when a cloud engine does not contain the property, a "property
      * not in resource" exception message is returned.
      */
     public function testPropertyNotInResource()
     {
-        $service = new engines\MissingPropertyService();
-        
-        $engine = $this->createMock(engines\CloudEngineBase::class);
+        $properties = [
+            'testProperty' => [
+                'name' => 'testProperty',
+                'type' => 'string',
+                'datatierswherepresent' => ['premium'],
+                'available' => false
+            ]
+        ];
 
-        $properties = array(
-            "testProperty" => array(
-                "name" => "testProperty",
-                "type" => "string",
-                "datatierswherepresent" => [ "premium" ],
-                "available" => false
-            )
-        );
-        
-        $engine->method('getProperties')
-             ->willReturn($properties);
-        $engine->method('getDataSourceTier')
-            ->willReturn("lite");
-        $engine->dataKey = "testElement";
+        $engine = $this->createMock(CloudEngineBase::class);
+        $engine->method('getProperties')->willReturn($properties);
+        $engine->method('getDataSourceTier')->willReturn('lite');
+        $engine->dataKey = 'testElement';
 
-        // Assert
+        $errorMessage = sprintf(MissingPropertyMessages::PREFIX, 'otherProperty', 'testElement');
+        $errorMessage .= sprintf(MissingPropertyMessages::PROPERTY_NOT_IN_CLOUD_RESOURCE, 'testElement', 'testProperty');
+
+        $service = new MissingPropertyService();
+
         try {
-            $service->check("otherProperty", $engine);
+            $service->check('otherProperty', $engine);
             $this->fail();
         } catch (\Exception $e) {
-            $this->assertEquals(
-                sprintf(engines\MissingPropertyMessages::PREFIX,
-                        "otherProperty",
-                        "testElement") .
-                sprintf(engines\MissingPropertyMessages::PROPERTY_NOT_IN_CLOUD_RESOURCE,
-                        "testElement",
-                        "testProperty"),
-                $e->getMessage());
+            $this->assertSame($errorMessage, $e->getMessage());
         }
     }
-        
+
     /**
      * Check that when none of the above are true, an "unknown" exception
      * message is returned.
      */
     public function testUnknown()
     {
-        $service = new engines\MissingPropertyService();
-        
-        $engine = $this->createMock(engines\Engine::class);
+        $properties = [
+            'testProperty' => [
+                'name' => 'testProperty',
+                'type' => 'string',
+                'datatierswherepresent' => ['premium'],
+                'available' => true
+            ]
+        ];
 
-        $properties = array(
-            "testProperty" => array(
-                "name" => "testProperty",
-                "type" => "string",
-                "datatierswherepresent" => [ "premium" ],
-                "available" => true
-            )
-        );
-        
-        $engine->method('getProperties')
-             ->willReturn($properties);
-        $engine->method('getDataSourceTier')
-            ->willReturn("premium");
-        $engine->dataKey = "testElement";
+        $engine = $this->createMock(Engine::class);
+        $engine->method('getProperties')->willReturn($properties);
+        $engine->method('getDataSourceTier')->willReturn('premium');
+        $engine->dataKey = 'testElement';
 
-        // Assert
+        $errorMessage = sprintf(MissingPropertyMessages::PREFIX, 'testProperty', 'testElement');
+        $errorMessage .= MissingPropertyMessages::UNKNOWN;
+
+        $service = new MissingPropertyService();
+
         try {
-            $service->check("testProperty", $engine);
+            $service->check('testProperty', $engine);
             $this->fail();
         } catch (\Exception $e) {
-            $this->assertEquals(
-                sprintf(engines\MissingPropertyMessages::PREFIX,
-                        "testProperty",
-                        "testElement") .
-                engines\MissingPropertyMessages::UNKNOWN,
-                $e->getMessage());
+            $this->assertSame($errorMessage, $e->getMessage());
         }
     }
 }

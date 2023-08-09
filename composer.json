@@ -23,20 +23,28 @@
     "license": "EUPL-1.2", 
     "type": "library",
     "autoload": {
-        "classmap": [
-            "AspectData.php",
-            "AspectDataDictionary.php",
-            "DataKeyedCache.php",
-            "Engine.php",
-            "CloudEngineBase.php",
-            "MissingPropertyService.php",
-            "MissingPropertyReason.php",
-            "MissingPropertyMessages.php",
-            "SessionCache.php",
-            "Tracker.php"
-        ]
+        "psr-4": {
+            "fiftyone\\pipeline\\engines\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "fiftyone\\pipeline\\engines\\tests\\": "tests/"
+        }
     },
     "require": {
+        "php": ">=7.4",
+        "ext-json": "*",
         "51degrees/fiftyone.pipeline.core": "4.*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "*",
+        "friendsofphp/php-cs-fixer": "^3.22",
+        "phpstan/phpstan": "^1.10"
+    },
+    "scripts": {
+        "phpstan": "vendor/bin/phpstan analyze",
+        "php-cs-fixer": "vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.php --diff --verbose",
+        "php-cs-fixer-ci": "vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.php --diff --verbose --dry-run --format=junit"
     }
 }
