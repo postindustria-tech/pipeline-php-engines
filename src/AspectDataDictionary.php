@@ -30,7 +30,7 @@ namespace fiftyone\pipeline\engines;
 class AspectDataDictionary extends AspectData
 {
     /**
-     * @var array<string, mixed>
+     * @var array<int|string, mixed>
      */
     private $contents;
 
@@ -51,7 +51,7 @@ class AspectDataDictionary extends AspectData
      * Get the values contained in the aspectData instance as a dictionary
      * of keys and values.
      *
-     * @return array<string, mixed>
+     * @return array<int|string, mixed>
      */
     public function asDictionary()
     {
