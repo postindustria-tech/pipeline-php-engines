@@ -23,8 +23,6 @@
 
 namespace fiftyone\pipeline\engines;
 
-use fiftyone\pipeline\engines\MissingPropertyReason;
-
 /**
  * A missing property service runs when a property is not available in the
  * aspectData. It can be extended to provide a specific message for why the property
@@ -41,7 +39,7 @@ class MissingPropertyService
     /**
      * Get the message to go with the exception.
      * @param string $propertyName
-     * @param \fiftyone\pipeline\engines\CloudEngine $flowElement
+     * @param \fiftyone\pipeline\engines\CloudEngineBase $flowElement
      * @return string
      */
     private function getMessage($propertyName, $flowElement) {

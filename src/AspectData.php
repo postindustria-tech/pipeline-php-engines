@@ -23,8 +23,6 @@
 
 namespace fiftyone\pipeline\engines;
 
-use fiftyone\pipeline\engines\MissingPropertyService;
-
 use fiftyone\pipeline\core\ElementData;
 
 /**
