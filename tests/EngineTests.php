@@ -21,15 +21,14 @@
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
 
-session_start();
+namespace fiftyone\pipeline\engines\tests;
 
-require(__DIR__ . "/../vendor/autoload.php");
+session_start();
 
 use fiftyone\pipeline\core\PipelineBuilder;
 use fiftyone\pipeline\engines\AspectDataDictionary;
 use fiftyone\pipeline\engines\Engine;
 use fiftyone\pipeline\engines\SessionCache;
-
 use PHPUnit\Framework\TestCase;
 
 // Test creating engine
