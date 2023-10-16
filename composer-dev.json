@@ -23,18 +23,9 @@
     "license": "EUPL-1.2", 
     "type": "library",
     "autoload": {
-        "classmap": [
-            "AspectData.php",
-            "AspectDataDictionary.php",
-            "DataKeyedCache.php",
-            "Engine.php",
-            "CloudEngineBase.php",
-            "MissingPropertyService.php",
-            "MissingPropertyReason.php",
-            "MissingPropertyMessages.php",
-            "SessionCache.php",
-            "Tracker.php"
-        ]
+        "psr-4": {
+            "fiftyone\\pipeline\\engines\\": "src/"
+        }
     },
     "repositories": [
         {

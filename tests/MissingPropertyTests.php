@@ -23,10 +23,7 @@
 
 namespace fiftyone\pipeline\engines\tests;
 
-require(__DIR__ . "/../vendor/autoload.php");
-
 use fiftyone\pipeline\engines;
-
 use PHPUnit\Framework\TestCase;
 
 class MissingPropertyTests extends TestCase {
