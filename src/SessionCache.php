@@ -31,6 +31,8 @@ namespace fiftyone\pipeline\engines;
 */
 class SessionCache extends DataKeyedCache
 {
+    private $cacheTime;
+
     public function __construct($cacheTime = 0)
     {
         $this->cacheTime = $cacheTime;
