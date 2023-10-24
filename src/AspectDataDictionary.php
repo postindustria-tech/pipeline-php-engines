@@ -31,7 +31,8 @@ use fiftyone\pipeline\engines\AspectData;
 */
 class AspectDataDictionary extends AspectData
 {
-
+    private $contents;
+    
     /**
     * Constructor for element data dictionary
     * @param FlowElement

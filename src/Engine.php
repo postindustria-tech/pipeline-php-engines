@@ -33,8 +33,10 @@ use fiftyone\pipeline\core\FlowElement;
  */
 class Engine extends FlowElement
 {
-    private $dataSourceTier = "Unknown";    
-    
+    public $restrictedProperties;
+    private $cache;
+    private $dataSourceTier = "Unknown";
+
     /**
      * Get the tier to which the current data source belongs. For 51Degrees this
      * will usually be one of: Lite Premium Enterprise 
