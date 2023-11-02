@@ -10,7 +10,7 @@ This project contains the source code for the 'engines' functionality for the PH
 ## Tests
 To run the tests in this repository, make sure PHPUnit is installed then, in the root of this repo, call:
 ```
-phpunit --log-junit test-results.xml
+phpunit --fail-on-warning --display-warnings --log-junit test-results.xml
 ```
 
 
