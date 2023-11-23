@@ -25,12 +25,13 @@ namespace fiftyone\pipeline\engines;
 
 /**
  * Enumeration of reasons why a property may be missing from the results of an
- * Engine's processing. 
+ * Engine's processing.
  */
-class MissingPropertyReason {
-    const DataFileUpgradeRequired = 0;
-    const PropertyExcludedFromEngineConfiguration = 1;
-    const PropertyNotAccessibleWithResourceKey = 2;
-    const ProductNotAccessibleWithResourceKey = 3;
-    const Unknown = 4;
+class MissingPropertyReason
+{
+    public const DataFileUpgradeRequired = 0;
+    public const PropertyExcludedFromEngineConfiguration = 1;
+    public const PropertyNotAccessibleWithResourceKey = 2;
+    public const ProductNotAccessibleWithResourceKey = 3;
+    public const Unknown = 4;
 }

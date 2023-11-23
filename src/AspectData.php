@@ -26,21 +26,22 @@ namespace fiftyone\pipeline\engines;
 use fiftyone\pipeline\core\ElementData;
 
 /**
-* aspectData extends elementData by adding the option of a missing property service
-* It also allows properties to be explicitly excluded by a flowElement / engine
-*/
+ * aspectData extends elementData by adding the option of a missing property service
+ * It also allows properties to be explicitly excluded by a flowElement / engine.
+ */
 class AspectData extends ElementData
 {
     public $missingPropertyService;
-    
+
     /**
-    * Constructor for element data
-    * Adds default missing property service if not available
-    * @param FlowElement
-    */
+     * Constructor for element data
+     * Adds default missing property service if not available.
+     *
+     * @param \fiftyone\pipeline\core\FlowElement $flowElement
+     */
     public function __construct($flowElement)
     {
-        if (!isset($this->missingPropertyService)) {
+        if ($this->missingPropertyService === null) {
             $this->missingPropertyService = new MissingPropertyService();
         }
 
@@ -48,21 +49,22 @@ class AspectData extends ElementData
     }
 
     /**
-    * Get a value (unless in a flowElement's restrictedProperties list)
-    * If property not found, call the attached missing property service
-    * @param string key
-    * @return mixed
-    */
+     * Get a value (unless in a flowElement's restrictedProperties list)
+     * If property not found, call the attached missing property service.
+     *
+     * @param string $key
+     * @return mixed
+     */
     public function get($key)
     {
         try {
             $result = $this->getInternal($key);
-
-            if (!isset($result)) {
+            
+            if (empty($result)) {
                 return $this->missingPropertyService->check($key, $this->flowElement);
-            } else {
-                return $result;
             }
+
+            return $result;
         } catch (\Exception $e) {
             return $this->missingPropertyService->check($key, $this->flowElement);
         }

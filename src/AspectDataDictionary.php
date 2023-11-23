@@ -23,21 +23,20 @@
 
 namespace fiftyone\pipeline\engines;
 
-use fiftyone\pipeline\engines\AspectData;
-
 /**
-* aspectData class extension that stores content as an array
-* Similar to elementDataDictionary in the Pipeline core library
-*/
+ * AspectData class extension that stores content as an array
+ * Similar to ElementDataDictionary in the Pipeline core library.
+ */
 class AspectDataDictionary extends AspectData
 {
     private $contents;
-    
+
     /**
-    * Constructor for element data dictionary
-    * @param FlowElement
-    * @param mixed[] dicitonary contents
-    */
+     * Constructor for element data dictionary.
+     *
+     * @param \fiftyone\pipeline\core\FlowElement $flowElement
+     * @param array $contents Dictionary contents
+     */
     public function __construct($flowElement, $contents)
     {
         $this->contents = $contents;
@@ -46,26 +45,24 @@ class AspectDataDictionary extends AspectData
     }
 
     /**
-    * Get the values contained in the aspectData instance as a dictionary
-    * of keys and values.
-    * @return mixed[]
-    */
+     * Get the values contained in the aspectData instance as a dictionary
+     * of keys and values.
+     *
+     * @return array
+     */
     public function asDictionary()
     {
         return $this->contents;
     }
 
     /**
-    * Internal getter for contents
-    * @param string key
-    * @return mixed
-    */
+     * Internal getter for contents.
+     *
+     * @param string $key
+     * @return mixed
+     */
     public function getInternal($key)
     {
-        if (isset($this->contents[$key])) {
-            return $this->contents[$key];
-        } else {
-            return null;
-        }
+        return $this->contents[$key] ?? null;
     }
 }

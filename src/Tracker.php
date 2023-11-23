@@ -21,28 +21,34 @@
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
 
-
-
 namespace fiftyone\pipeline\engines;
 
 /**
  * The tracker class extends the cache class with
  * a track method that checks if a key is in the cache and runs
- * a match method on the result if it is found in the cache
-*/
+ * a match method on the result if it is found in the cache.
+ */
 class Tracker extends DataKeyedCache
 {
+    /**
+     * @param string $key
+     * @return bool
+     */
     public function track($key)
     {
         $result = $this->get($key);
-
-        if (!isset($result) || !$result) {
-            return true;
-        } else {
-            return $this->match($key, $result);
+        
+        if (empty($result)) {
+            return $this->match($result);
         }
+        
+        return true;
     }
 
+    /**
+     * @param mixed $result
+     * @return bool
+     */
     public function match($result)
     {
         return true;
