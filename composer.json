@@ -33,6 +33,7 @@
         }
     },
     "require": {
+        "php": ">=7.4",
         "51degrees/fiftyone.pipeline.core": "4.*"
     },
     "require-dev": {
