@@ -35,25 +35,25 @@ use PHPUnit\Framework\TestCase;
 
 class ExampleAspectEngine extends Engine
 {
-    public $dataKey = "example";
+    public $dataKey = 'example';
+
+    public $properties = [
+        'integer' => [
+            'type' => 'int'
+        ],
+        'boolean' => [
+            'type' => 'bool'
+        ]
+    ];
+
+    public $restrictedProperties = ['integer'];
 
     public function processInternal($flowData)
     {
-        $data = new AspectDataDictionary($this, array("integer" => 5));
+        $data = new AspectDataDictionary($this, ['integer' => 5]);
 
         $flowData->setElementData($data);
     }
-
-    public $properties = array(
-        "integer" => array(
-            "type" => "int"
-        ),
-        "boolean" => array(
-            "type" => "bool"
-        )
-    );
-
-    public $restrictedProperties = ["integer"];
 }
 
 class EngineTests extends TestCase
@@ -75,14 +75,11 @@ class EngineTests extends TestCase
         return $flowData;
     }
 
-
     public function testEngine()
     {
         $flowData = $this->createAndProcess();
-
-        $this->assertTrue($flowData->get("example")->get("integer") === 5);
+        $this->assertSame(5, $flowData->get('example')->get('integer'));
     }
-
 
     // Test missing property service
     public function testMissingProperty()
@@ -90,7 +87,7 @@ class EngineTests extends TestCase
         $flowData = $this->createAndProcess();
 
         try {
-            $flowData->get("example")->get("test");
+            $flowData->get('example')->get('test');
         } catch (\Exception $e) {
             $missingPropertyError = true;
         }
@@ -104,7 +101,7 @@ class EngineTests extends TestCase
         $flowData = $this->createAndProcess();
 
         try {
-            $flowData->get("example")->get("boolean");
+            $flowData->get('example')->get('boolean');
         } catch (\Exception $e) {
             $restrictedProperties = true;
         }

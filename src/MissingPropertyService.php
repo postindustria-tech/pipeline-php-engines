@@ -26,29 +26,34 @@ namespace fiftyone\pipeline\engines;
 /**
  * A missing property service runs when a property is not available in the
  * aspectData. It can be extended to provide a specific message for why the property
- * is not available
-*/
+ * is not available.
+ */
 class MissingPropertyService
 {
-    
+    /**
+     * @param string $propertyName
+     * @param \fiftyone\pipeline\core\FlowElement $flowElement
+     * @throws \Exception
+     */
     public function check($propertyName, $flowElement)
     {
         throw new \Exception($this->getMessage($propertyName, $flowElement));
     }
-    
+
     /**
      * Get the message to go with the exception.
+     *
      * @param string $propertyName
      * @param \fiftyone\pipeline\engines\CloudEngineBase $flowElement
      * @return string
      */
-    private function getMessage($propertyName, $flowElement) {
-        
+    private function getMessage($propertyName, $flowElement)
+    {
         $reason = MissingPropertyReason::Unknown;
         $property = null;
 
         foreach ($flowElement->getProperties() as $currentProperty) {
-            if (isset($currentProperty["name"])) {
+            if (isset($currentProperty['name'])) {
                 if (strcasecmp($currentProperty['name'], $propertyName) == 0) {
                     $property = $currentProperty;
                     break;
@@ -56,7 +61,7 @@ class MissingPropertyService
             }
         }
 
-        if ($property != null) {
+        if ($property !== null) {
             // Check if the property is available in the data file that is
             // being used by the engine.
             $containsDataTier = false;
@@ -72,32 +77,30 @@ class MissingPropertyService
                     $reason = MissingPropertyReason::DataFileUpgradeRequired;
                 }
                 // Check if the property is excluded from the results.
-                else if ($property['available'] === false) {
+                elseif ($property['available'] === false) {
                     $reason = MissingPropertyReason::PropertyExcludedFromEngineConfiguration;
                 }
             }
-        }
-        else {
+        } else {
             if ($flowElement instanceof CloudEngineBase) {
-                if (count($flowElement->getProperties()) == 0) {
+                if (count($flowElement->getProperties()) === 0) {
                     $reason = MissingPropertyReason::ProductNotAccessibleWithResourceKey;
-                }
-                else {
+                } else {
                     $reason = MissingPropertyReason::PropertyNotAccessibleWithResourceKey;
                 }
             }
         }
 
         // Build the message string to return to the caller.
-        $message = sprintf(MissingPropertyMessages::PREFIX,
-                $propertyName,
-                $flowElement->dataKey);
+        $message = sprintf(MissingPropertyMessages::PREFIX, $propertyName, $flowElement->dataKey);
+        
         switch ($reason) {
             case MissingPropertyReason::DataFileUpgradeRequired:
                 $message .= sprintf(
                     MissingPropertyMessages::DATA_UPGRADE_REQUIRED,
-                    join(",", $property['datatierswherepresent']),
-                    get_class($flowElement));
+                    join(',', $property['datatierswherepresent']),
+                    get_class($flowElement)
+                );
                 break;
             case MissingPropertyReason::PropertyExcludedFromEngineConfiguration:
                 $message .= MissingPropertyMessages::PROPERTY_EXCLUDED;
@@ -105,15 +108,16 @@ class MissingPropertyService
             case MissingPropertyReason::ProductNotAccessibleWithResourceKey:
                 $message .= sprintf(
                     MissingPropertyMessages::PRODUCT_NOT_IN_CLOUD_RESOURCE,
-                    get_class($flowElement));
+                    get_class($flowElement)
+                );
                 break;
             case MissingPropertyReason::PropertyNotAccessibleWithResourceKey:
-                
                 $available = $this->getPropertyNames($flowElement->getProperties());
                 $message .= sprintf(
                     MissingPropertyMessages::PROPERTY_NOT_IN_CLOUD_RESOURCE,
                     $flowElement->dataKey,
-                    join(", ", $available));
+                    join(', ', $available)
+                );
                 break;
             case MissingPropertyReason::Unknown:
                 $message .= MissingPropertyMessages::UNKNOWN;
@@ -124,17 +128,21 @@ class MissingPropertyService
 
         return $message;
     }
-    
+
     /**
      * Get an array of property names from an array of properties.
+     *
      * @param array $properties
      * @return array
      */
-    private function getPropertyNames($properties) {
+    private function getPropertyNames($properties)
+    {
         $names = [];
+        
         foreach ($properties as $property) {
-            array_push($names, $property["name"]);
+            $names[] = $property['name'];
         }
+
         return $names;
     }
 }

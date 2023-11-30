@@ -37,6 +37,7 @@
         "51degrees/fiftyone.pipeline.core": "4.*"
     },
     "require-dev": {
-        "phpunit/phpunit": "*"
+        "phpunit/phpunit": "*",
+        "friendsofphp/php-cs-fixer": "^3.39"
     }
 }

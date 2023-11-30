@@ -21,34 +21,30 @@
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
 
-
-
 namespace fiftyone\pipeline\engines;
 
 /**
  * A simple cache class which has a get and set method
  * Can be added to an engine to cache its results for specific evidence
- * This base class needs to be extended to form an actual cache
-*/
+ * This base class needs to be extended to form an actual cache.
+ */
 class DataKeyedCache
 {
-  /**
-  * Get an item from the cache.
-  * This method needs to be implemented in a subclass to work
-  * @param string cache key
-  * @param mixed cache result
-  */
-    public function get($cachekey)
-    {
-    }
+    /**
+     * Get an item from the cache.
+     * This method needs to be implemented in a subclass to work.
+     *
+     * @param string $cacheKey
+     * @return mixed
+     */
+    public function get($cacheKey) {}
 
     /**
-    * Add a value to the cache
-    * This method needs to be implemented in a subclass to work
-    * @param string cache key
-    * @param mixed cache value
-    */
-    public function set($cachekey, $value)
-    {
-    }
+     * Add a value to the cache
+     * This method needs to be implemented in a subclass to work.
+     *
+     * @param string $cacheKey
+     * @param mixed $value
+     */
+    public function set($cacheKey, $value) {}
 }

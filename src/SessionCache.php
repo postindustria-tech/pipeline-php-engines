@@ -21,14 +21,12 @@
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
 
-
-
 namespace fiftyone\pipeline\engines;
 
 /**
  * An extension of the cache class that stores a cache in a user's session
- * if PHP sessions are active
-*/
+ * if PHP sessions are active.
+ */
 class SessionCache extends DataKeyedCache
 {
     private $cacheTime;
@@ -38,20 +36,28 @@ class SessionCache extends DataKeyedCache
         $this->cacheTime = $cacheTime;
     }
 
+    /**
+     * @param string $key
+     * @param mixed $value
+     */
     public function set($key, $value)
     {
-        $cacheKey = \json_encode($key);
+        $cacheKey = json_encode($key);
 
         if (session_id()) {
-            $cacheEntry = array(
-                "time" => time(),
-                "data" => serialize($value)
-            );
+            $cacheEntry = [
+                'time' => time(),
+                'data' => serialize($value)
+            ];
 
             $_SESSION[$cacheKey] = $cacheEntry;
         }
     }
 
+    /**
+     * @param string $key
+     * @return mixed
+     */
     public function get($key)
     {
         $cacheKey = json_encode($key);
@@ -61,13 +67,12 @@ class SessionCache extends DataKeyedCache
 
             // Check if timestamp greater than that set
 
-            if (time() - $cacheEntry["time"] < $this->cacheTime) {
-                return unserialize($cacheEntry["data"]);
-            } else {
-                unset($_SESSION[$cacheKey]);
-
-                return null;
+            if (time() - $cacheEntry['time'] < $this->cacheTime) {
+                return unserialize($cacheEntry['data']);
             }
-        };
+            unset($_SESSION[$cacheKey]);
+
+            return null;
+        }
     }
 }
