@@ -21,6 +21,8 @@
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
 
+declare(strict_types=1);
+
 namespace fiftyone\pipeline\engines;
 
 /**
@@ -29,18 +31,18 @@ namespace fiftyone\pipeline\engines;
  */
 class SessionCache extends DataKeyedCache
 {
-    private $cacheTime;
+    private int $cacheTime;
 
-    public function __construct($cacheTime = 0)
+    public function __construct(int $cacheTime = 0)
     {
         $this->cacheTime = $cacheTime;
     }
 
     /**
-     * @param string $key
+     * @param string|array<string, mixed> $key
      * @param mixed $value
      */
-    public function set($key, $value)
+    public function set($key, $value): void
     {
         $cacheKey = json_encode($key);
 
@@ -55,7 +57,7 @@ class SessionCache extends DataKeyedCache
     }
 
     /**
-     * @param string $key
+     * @param string|array<string, mixed> $key
      * @return mixed
      */
     public function get($key)

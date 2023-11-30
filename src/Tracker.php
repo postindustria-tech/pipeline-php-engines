@@ -21,6 +21,8 @@
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
 
+declare(strict_types=1);
+
 namespace fiftyone\pipeline\engines;
 
 /**
@@ -31,10 +33,9 @@ namespace fiftyone\pipeline\engines;
 class Tracker extends DataKeyedCache
 {
     /**
-     * @param string $key
-     * @return bool
+     * @param string|array<string> $key
      */
-    public function track($key)
+    public function track($key): bool
     {
         $result = $this->get($key);
         
@@ -47,9 +48,8 @@ class Tracker extends DataKeyedCache
 
     /**
      * @param mixed $result
-     * @return bool
      */
-    public function match($result)
+    public function match($result): bool
     {
         return true;
     }

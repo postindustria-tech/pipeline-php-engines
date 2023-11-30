@@ -35,9 +35,9 @@ use PHPUnit\Framework\TestCase;
 
 class ExampleAspectEngine extends Engine
 {
-    public $dataKey = 'example';
+    public string $dataKey = 'example';
 
-    public $properties = [
+    public array $properties = [
         'integer' => [
             'type' => 'int'
         ],
@@ -46,9 +46,9 @@ class ExampleAspectEngine extends Engine
         ]
     ];
 
-    public $restrictedProperties = ['integer'];
+    public array $restrictedProperties = ['integer'];
 
-    public function processInternal($flowData)
+    public function processInternal($flowData): void
     {
         $data = new AspectDataDictionary($this, ['integer' => 5]);
 

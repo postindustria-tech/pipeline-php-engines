@@ -21,6 +21,8 @@
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
 
+declare(strict_types=1);
+
 namespace fiftyone\pipeline\engines;
 
 /**
@@ -29,15 +31,17 @@ namespace fiftyone\pipeline\engines;
  */
 class AspectDataDictionary extends AspectData
 {
-    private $contents;
+    /**
+     * @var array<string, mixed>
+     */
+    private array $contents;
 
     /**
      * Constructor for element data dictionary.
      *
-     * @param \fiftyone\pipeline\core\FlowElement $flowElement
-     * @param array $contents Dictionary contents
+     * @param array<string, mixed> $contents Dictionary contents
      */
-    public function __construct($flowElement, $contents)
+    public function __construct(Engine $flowElement, array $contents)
     {
         $this->contents = $contents;
 
@@ -48,9 +52,9 @@ class AspectDataDictionary extends AspectData
      * Get the values contained in the aspectData instance as a dictionary
      * of keys and values.
      *
-     * @return array
+     * @return array<string, mixed>
      */
-    public function asDictionary()
+    public function asDictionary(): array
     {
         return $this->contents;
     }
@@ -58,10 +62,9 @@ class AspectDataDictionary extends AspectData
     /**
      * Internal getter for contents.
      *
-     * @param string $key
      * @return mixed
      */
-    public function getInternal($key)
+    public function getInternal(string $key)
     {
         return $this->contents[$key] ?? null;
     }

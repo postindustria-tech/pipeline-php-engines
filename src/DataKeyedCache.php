@@ -21,6 +21,8 @@
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
 
+declare(strict_types=1);
+
 namespace fiftyone\pipeline\engines;
 
 /**
@@ -34,7 +36,7 @@ class DataKeyedCache
      * Get an item from the cache.
      * This method needs to be implemented in a subclass to work.
      *
-     * @param string $cacheKey
+     * @param string|array<string, mixed> $cacheKey
      * @return mixed
      */
     public function get($cacheKey) {}
@@ -43,8 +45,8 @@ class DataKeyedCache
      * Add a value to the cache
      * This method needs to be implemented in a subclass to work.
      *
-     * @param string $cacheKey
+     * @param string|array<string, mixed> $cacheKey
      * @param mixed $value
      */
-    public function set($cacheKey, $value) {}
+    public function set($cacheKey, $value): void {}
 }
