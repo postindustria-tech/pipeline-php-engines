@@ -21,8 +21,11 @@
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
 
+declare(strict_types=1);
+
 namespace fiftyone\pipeline\engines;
 
+use fiftyone\pipeline\core\FlowData;
 use fiftyone\pipeline\core\FlowElement;
 
 /**
@@ -32,17 +35,18 @@ use fiftyone\pipeline\core\FlowElement;
  */
 class Engine extends FlowElement
 {
-    public $restrictedProperties;
-    private $cache;
-    private $dataSourceTier = 'Unknown';
+    /**
+     * @var array<string>
+     */
+    public array $restrictedProperties;
+    private ?DataKeyedCache $cache = null;
+    private string $dataSourceTier = 'Unknown';
 
     /**
      * Get the tier to which the current data source belongs. For 51Degrees this
      * will usually be one of: Lite Premium Enterprise.
-     *
-     * @return string
      */
-    public function getDataSourceTier()
+    public function getDataSourceTier(): string
     {
         return $this->dataSourceTier;
     }
@@ -52,7 +56,7 @@ class Engine extends FlowElement
      *
      * @param \fiftyone\pipeline\engines\DataKeyedCache $cache Cache implementation with get and set methods
      */
-    public function setCache($cache)
+    public function setCache(DataKeyedCache $cache): void
     {
         $this->cache = $cache;
     }
@@ -60,9 +64,9 @@ class Engine extends FlowElement
     /**
      * Add a subset of properties.
      *
-     * @param string[] $propertiesList Array of properties to include
+     * @param array<string> $propertiesList Array of properties to include
      */
-    public function setRestrictedProperties($propertiesList)
+    public function setRestrictedProperties(array $propertiesList): void
     {
         $this->restrictedProperties = $propertiesList;
     }
@@ -72,7 +76,7 @@ class Engine extends FlowElement
      *
      * @param \fiftyone\pipeline\core\FlowData $flowData
      */
-    public function inCache($flowData)
+    public function inCache(FlowData $flowData): bool
     {
         $keys = $this->filterEvidence($flowData);
 
@@ -91,14 +95,12 @@ class Engine extends FlowElement
      * Engine's core process function.
      * Calls specific overridden processInternal methods but wraps it in a cache check
      * and a cache put.
-     *
-     * @param \fiftyone\pipeline\core\FlowData $flowData
      */
-    public function process($flowData)
+    public function process(FlowData $flowData): void
     {
         if ($this->cache) {
             if ($this->inCache($flowData)) {
-                return true;
+                return;
             }
         }
 

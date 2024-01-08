@@ -21,25 +21,27 @@
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
 
+declare(strict_types=1);
+
 namespace fiftyone\pipeline\engines;
 
 use fiftyone\pipeline\core\ElementData;
 
 /**
- * aspectData extends elementData by adding the option of a missing property service
- * It also allows properties to be explicitly excluded by a flowElement / engine.
+ * AspectData extends ElementData by adding the option of a missing property service
+ * It also allows properties to be explicitly excluded by a FlowElement / Engine.
+ *
+ * @property \fiftyone\pipeline\engines\Engine $flowElement
  */
 class AspectData extends ElementData
 {
-    public $missingPropertyService;
+    public ?MissingPropertyService $missingPropertyService = null;
 
     /**
      * Constructor for element data
      * Adds default missing property service if not available.
-     *
-     * @param \fiftyone\pipeline\core\FlowElement $flowElement
      */
-    public function __construct($flowElement)
+    public function __construct(Engine $flowElement)
     {
         if ($this->missingPropertyService === null) {
             $this->missingPropertyService = new MissingPropertyService();
@@ -52,10 +54,9 @@ class AspectData extends ElementData
      * Get a value (unless in a flowElement's restrictedProperties list)
      * If property not found, call the attached missing property service.
      *
-     * @param string $key
      * @return mixed
      */
-    public function get($key)
+    public function get(string $key)
     {
         try {
             $result = $this->getInternal($key);

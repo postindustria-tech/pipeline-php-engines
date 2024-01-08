@@ -21,6 +21,8 @@
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
 
+declare(strict_types=1);
+
 namespace fiftyone\pipeline\engines;
 
 /**
@@ -31,23 +33,18 @@ namespace fiftyone\pipeline\engines;
 class MissingPropertyService
 {
     /**
-     * @param string $propertyName
-     * @param \fiftyone\pipeline\core\FlowElement $flowElement
      * @throws \Exception
+     * @return mixed
      */
-    public function check($propertyName, $flowElement)
+    public function check(string $propertyName, Engine $flowElement)
     {
         throw new \Exception($this->getMessage($propertyName, $flowElement));
     }
 
     /**
      * Get the message to go with the exception.
-     *
-     * @param string $propertyName
-     * @param \fiftyone\pipeline\engines\CloudEngineBase $flowElement
-     * @return string
      */
-    private function getMessage($propertyName, $flowElement)
+    private function getMessage(string $propertyName, Engine $flowElement): string
     {
         $reason = MissingPropertyReason::Unknown;
         $property = null;
@@ -132,10 +129,10 @@ class MissingPropertyService
     /**
      * Get an array of property names from an array of properties.
      *
-     * @param array $properties
-     * @return array
+     * @param array<string, array<string, mixed>> $properties
+     * @return array<int, mixed>
      */
-    private function getPropertyNames($properties)
+    private function getPropertyNames(array $properties): array
     {
         $names = [];
         
