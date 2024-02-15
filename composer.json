@@ -1,6 +1,9 @@
 {
     "name": "51degrees/fiftyone.pipeline.engines",
-    "description": "Engines shared functionality library for 51Degrees Pipeline API",
+    "description": "Engines shared functionality library for 51Degrees Pipeline API.",
+    "keywords": [ 
+        "51degrees" 
+    ],
     "authors" : [
         {
             "name": "51Degrees Engineering",
